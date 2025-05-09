@@ -68,7 +68,7 @@ async function generatePrompt(
 
 ${await markdownFormattingSection()}
 
-${getSharedToolUseSection()}
+${await getSharedToolUseSection()}
 
 ${getToolDescriptionsForMode(
 	mode,
@@ -81,7 +81,7 @@ ${getToolDescriptionsForMode(
 	experiments,
 )}
 
-${getToolUseGuidelinesSection()}
+${await getToolUseGuidelinesSection()}
 
 ${mcpServersSection}
 
@@ -91,7 +91,7 @@ ${modesSection}
 
 ${getRulesSection(cwd, supportsComputerUse, effectiveDiffStrategy)}
 
-${getSystemInfoSection(cwd)}
+${await getSystemInfoSection(cwd)}
 
 ${getObjectiveSection()}
 

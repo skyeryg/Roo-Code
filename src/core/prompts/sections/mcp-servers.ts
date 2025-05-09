@@ -57,6 +57,6 @@ export async function getMcpServersSection(
 	return (
 		baseSection +
 		`
-${await compilePrompt("sections/create-mcp-servers", {})}`
+${await compilePrompt("sections/create-mcp-servers")}`
 	)
 }

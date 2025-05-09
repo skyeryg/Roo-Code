@@ -12,14 +12,15 @@ const delimiterRegex = /\{\{\s*([^{}]*)\s*\}\}/g
  * @param data 模板数据
  * @returns 表达式计算结果
  */
-function evaluateExpression(expr: string, data: TemplateContent): string {
+function evaluateExpression(expr: string, data?: TemplateContent): string {
 	try {
 		// 创建安全的数据访问环境
 		const sandbox = Object.create(null)
-		Object.keys(data).forEach((key) => {
-			sandbox[key] = data[key]
-		})
-
+		if (data) {
+			Object.keys(data).forEach((key) => {
+				sandbox[key] = data[key]
+			})
+		}
 		// 使用Function构造函数避免直接使用eval
 		const evaluator = new Function(...Object.keys(sandbox), `return ${expr};`)
 
@@ -39,7 +40,7 @@ function evaluateExpression(expr: string, data: TemplateContent): string {
  * @param template 模板字符串
  * @returns 渲染函数
  */
-function compileTemplate(template: string): (ctc: TemplateContent) => string {
+function compileTemplate(template: string): (ctx?: TemplateContent) => string {
 	const parts: string[] = []
 	const exprs: string[] = []
 	let lastIndex = 0
@@ -52,7 +53,7 @@ function compileTemplate(template: string): (ctc: TemplateContent) => string {
 	}
 	parts.push(template.slice(lastIndex))
 
-	return (ctx: TemplateContent) => {
+	return (ctx?: TemplateContent) => {
 		let output = parts[0]
 		for (let i = 0; i < exprs.length; i++) {
 			output += evaluateExpression(exprs[i], ctx) + parts[i + 1]
@@ -67,11 +68,11 @@ function compileTemplate(template: string): (ctc: TemplateContent) => string {
  * @param context 模板数据
  * @returns 渲染结果
  */
-export function renderTemplate(template: string, context: TemplateContent): string {
+export function renderTemplate(template: string, context?: TemplateContent): string {
 	return compileTemplate(template)(context)
 }
 
-export async function compilePrompt(name: string, context: TemplateContent, lang: string = "en") {
+export async function compilePrompt(name: string, context?: TemplateContent, lang: string = "en") {
 	const templatePath = await getTemplateFilePath(name, lang)
 
 	const templateContent = await safeReadFile(templatePath)
