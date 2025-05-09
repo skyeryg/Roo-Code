@@ -66,7 +66,7 @@ async function generatePrompt(
 
 	const basePrompt = `${roleDefinition}
 
-${markdownFormattingSection()}
+${await markdownFormattingSection()}
 
 ${getSharedToolUseSection()}
 
@@ -85,7 +85,7 @@ ${getToolUseGuidelinesSection()}
 
 ${mcpServersSection}
 
-${getCapabilitiesSection(cwd, supportsComputerUse, mcpHub, effectiveDiffStrategy)}
+${await getCapabilitiesSection(cwd, supportsComputerUse, mcpHub, effectiveDiffStrategy)}
 
 ${modesSection}
 
