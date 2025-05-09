@@ -28,7 +28,7 @@ function interpolatePromptContent(content: string, variables: PromptVariables): 
 /**
  * Safely reads a file, returning an empty string if the file doesn't exist
  */
-async function safeReadFile(filePath: string): Promise<string> {
+export async function safeReadFile(filePath: string): Promise<string> {
 	try {
 		const content = await fs.readFile(filePath, "utf-8")
 		// When reading with "utf-8" encoding, content should be a string
