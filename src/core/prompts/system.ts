@@ -89,7 +89,7 @@ ${await getCapabilitiesSection(cwd, supportsComputerUse, mcpHub, effectiveDiffSt
 
 ${modesSection}
 
-${getRulesSection(cwd, supportsComputerUse, effectiveDiffStrategy)}
+${await getRulesSection(cwd, supportsComputerUse, effectiveDiffStrategy)}
 
 ${await getSystemInfoSection(cwd)}
 
