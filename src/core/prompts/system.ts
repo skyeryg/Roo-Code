@@ -70,7 +70,7 @@ ${await markdownFormattingSection()}
 
 ${await getSharedToolUseSection()}
 
-${getToolDescriptionsForMode(
+${await getToolDescriptionsForMode(
 	mode,
 	cwd,
 	supportsComputerUse,

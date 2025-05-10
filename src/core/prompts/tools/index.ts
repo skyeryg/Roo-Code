@@ -22,7 +22,7 @@ import { getSwitchModeDescription } from "./switch-mode"
 import { getNewTaskDescription } from "./new-task"
 
 // Map of tool names to their description functions
-const toolDescriptionMap: Record<string, (args: ToolArgs) => string | undefined> = {
+const toolDescriptionMap: Record<string, (args: ToolArgs) => Promise<string | undefined>> = {
 	execute_command: (args) => getExecuteCommandDescription(args),
 	read_file: (args) => getReadFileDescription(args),
 	fetch_instructions: () => getFetchInstructionsDescription(),
@@ -39,11 +39,11 @@ const toolDescriptionMap: Record<string, (args: ToolArgs) => string | undefined>
 	new_task: (args) => getNewTaskDescription(args),
 	insert_content: (args) => getInsertContentDescription(args),
 	search_and_replace: (args) => getSearchAndReplaceDescription(args),
-	apply_diff: (args) =>
+	apply_diff: async (args) =>
 		args.diffStrategy ? args.diffStrategy.getToolDescription({ cwd: args.cwd, toolOptions: args.toolOptions }) : "",
 }
 
-export function getToolDescriptionsForMode(
+export async function getToolDescriptionsForMode(
 	mode: Mode,
 	cwd: string,
 	supportsComputerUse: boolean,
@@ -52,7 +52,7 @@ export function getToolDescriptionsForMode(
 	mcpHub?: McpHub,
 	customModes?: ModeConfig[],
 	experiments?: Record<string, boolean>,
-): string {
+): Promise<string> {
 	const config = getModeConfig(mode, customModes)
 	const args: ToolArgs = {
 		cwd,
@@ -90,17 +90,20 @@ export function getToolDescriptionsForMode(
 	ALWAYS_AVAILABLE_TOOLS.forEach((tool) => tools.add(tool))
 
 	// Map tool descriptions for allowed tools
-	const descriptions = Array.from(tools).map((toolName) => {
-		const descriptionFn = toolDescriptionMap[toolName]
-		if (!descriptionFn) {
-			return undefined
-		}
 
-		return descriptionFn({
-			...args,
-			toolOptions: undefined, // No tool options in group-based approach
-		})
-	})
+	const descriptions = await Promise.all(
+		Array.from(tools).map(async (toolName) => {
+			const descriptionFn = toolDescriptionMap[toolName]
+			if (!descriptionFn) {
+				return undefined
+			}
+
+			return await descriptionFn({
+				...args,
+				toolOptions: undefined, // No tool options in group-based approach
+			})
+		}),
+	)
 
 	return `# Tools\n\n${descriptions.filter(Boolean).join("\n\n")}`
 }
