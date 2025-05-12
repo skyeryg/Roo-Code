@@ -57,20 +57,23 @@ async function generatePrompt(
 	const modeConfig = getModeBySlug(mode, customModeConfigs) || modes.find((m) => m.slug === mode) || modes[0]
 	const roleDefinition = promptComponent?.roleDefinition || modeConfig.roleDefinition
 
+	const templateContext = { cwd, lang: language }
+
 	const [modesSection, mcpServersSection] = await Promise.all([
-		getModesSection(context),
+		getModesSection(templateContext, context),
 		modeConfig.groups.some((groupEntry) => getGroupName(groupEntry) === "mcp")
-			? getMcpServersSection(mcpHub, effectiveDiffStrategy, enableMcpServerCreation)
+			? getMcpServersSection(templateContext, mcpHub, effectiveDiffStrategy, enableMcpServerCreation)
 			: Promise.resolve(""),
 	])
 
 	const basePrompt = `${roleDefinition}
 
-${await markdownFormattingSection()}
+${await markdownFormattingSection(templateContext)}
 
-${await getSharedToolUseSection()}
+${await getSharedToolUseSection(templateContext)}
 
 ${await getToolDescriptionsForMode(
+	templateContext,
 	mode,
 	cwd,
 	supportsComputerUse,
@@ -81,19 +84,19 @@ ${await getToolDescriptionsForMode(
 	experiments,
 )}
 
-${await getToolUseGuidelinesSection()}
+${await getToolUseGuidelinesSection(templateContext)}
 
 ${mcpServersSection}
 
-${await getCapabilitiesSection(cwd, supportsComputerUse, mcpHub, effectiveDiffStrategy)}
+${await getCapabilitiesSection(templateContext, cwd, supportsComputerUse, mcpHub, effectiveDiffStrategy)}
 
 ${modesSection}
 
-${await getRulesSection(cwd, supportsComputerUse, effectiveDiffStrategy)}
+${await getRulesSection(templateContext, cwd, supportsComputerUse, effectiveDiffStrategy)}
 
-${await getSystemInfoSection(cwd)}
+${await getSystemInfoSection(templateContext, cwd)}
 
-${getObjectiveSection()}
+${getObjectiveSection(templateContext)}
 
 ${await addCustomInstructions(promptComponent?.customInstructions || modeConfig.customInstructions || "", globalCustomInstructions || "", cwd, mode, { language: language ?? formatLanguage(vscode.env.language), rooIgnoreInstructions })}`
 

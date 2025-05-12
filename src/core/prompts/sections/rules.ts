@@ -1,7 +1,8 @@
 import { DiffStrategy } from "../../../shared/tools"
-import { compilePrompt } from "../template"
+import { compilePrompt, TemplateContext } from "../template"
 
 export async function getRulesSection(
+	templateContext: TemplateContext,
 	cwd: string,
 	supportsComputerUse: boolean,
 	diffStrategy?: DiffStrategy,
@@ -11,5 +12,5 @@ export async function getRulesSection(
 		diffStrategy,
 		supportsComputerUse,
 	}
-	return compilePrompt("sections/rules", context)
+	return await compilePrompt("sections/rules", templateContext, context)
 }

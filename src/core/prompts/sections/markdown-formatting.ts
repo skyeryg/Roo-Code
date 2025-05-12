@@ -1,5 +1,5 @@
-import { compilePrompt } from "../template"
+import { compilePrompt, TemplateContext } from "../template"
 
-export async function markdownFormattingSection(): Promise<string> {
-	return await compilePrompt("sections/markdown-formatting")
+export async function markdownFormattingSection(templateContext: TemplateContext): Promise<string> {
+	return await compilePrompt("sections/markdown-formatting", templateContext)
 }

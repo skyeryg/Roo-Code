@@ -1,8 +1,9 @@
 import { DiffStrategy } from "../../../shared/tools"
 import { McpHub } from "../../../services/mcp/McpHub"
-import { compilePrompt } from "../template"
+import { compilePrompt, TemplateContext } from "../template"
 
 export async function getMcpServersSection(
+	templateContext: TemplateContext,
 	mcpHub?: McpHub,
 	diffStrategy?: DiffStrategy,
 	enableMcpServerCreation?: boolean,
@@ -48,7 +49,7 @@ export async function getMcpServersSection(
 					.join("\n\n")}`
 			: "(No MCP servers currently connected)"
 
-	const baseSection = await compilePrompt("sections/mcp-servers", { connectedServers })
+	const baseSection = await compilePrompt("sections/mcp-servers", templateContext, { connectedServers })
 
 	if (!enableMcpServerCreation) {
 		return baseSection
@@ -57,6 +58,6 @@ export async function getMcpServersSection(
 	return (
 		baseSection +
 		`
-${await compilePrompt("sections/create-mcp-servers")}`
+${await compilePrompt("sections/create-mcp-servers", templateContext)}`
 	)
 }

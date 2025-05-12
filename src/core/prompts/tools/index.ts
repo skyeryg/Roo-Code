@@ -20,30 +20,35 @@ import { getUseMcpToolDescription } from "./use-mcp-tool"
 import { getAccessMcpResourceDescription } from "./access-mcp-resource"
 import { getSwitchModeDescription } from "./switch-mode"
 import { getNewTaskDescription } from "./new-task"
+import { TemplateContext } from "../template"
 
 // Map of tool names to their description functions
-const toolDescriptionMap: Record<string, (args: ToolArgs) => Promise<string | undefined>> = {
-	execute_command: (args) => getExecuteCommandDescription(args),
-	read_file: (args) => getReadFileDescription(args),
-	fetch_instructions: () => getFetchInstructionsDescription(),
-	write_to_file: (args) => getWriteToFileDescription(args),
-	search_files: (args) => getSearchFilesDescription(args),
-	list_files: (args) => getListFilesDescription(args),
-	list_code_definition_names: (args) => getListCodeDefinitionNamesDescription(args),
-	browser_action: (args) => getBrowserActionDescription(args),
-	ask_followup_question: () => getAskFollowupQuestionDescription(),
-	attempt_completion: () => getAttemptCompletionDescription(),
-	use_mcp_tool: (args) => getUseMcpToolDescription(args),
-	access_mcp_resource: (args) => getAccessMcpResourceDescription(args),
-	switch_mode: () => getSwitchModeDescription(),
-	new_task: (args) => getNewTaskDescription(args),
-	insert_content: (args) => getInsertContentDescription(args),
-	search_and_replace: (args) => getSearchAndReplaceDescription(args),
-	apply_diff: async (args) =>
+const toolDescriptionMap: Record<
+	string,
+	(templateContext: TemplateContext, args: ToolArgs) => Promise<string | undefined>
+> = {
+	execute_command: (templateContext, args) => getExecuteCommandDescription(templateContext, args),
+	read_file: (templateContext, args) => getReadFileDescription(templateContext, args),
+	fetch_instructions: (templateContext) => getFetchInstructionsDescription(templateContext),
+	write_to_file: (templateContext, args) => getWriteToFileDescription(templateContext, args),
+	search_files: (templateContext, args) => getSearchFilesDescription(templateContext, args),
+	list_files: (templateContext, args) => getListFilesDescription(templateContext, args),
+	list_code_definition_names: (templateContext, args) => getListCodeDefinitionNamesDescription(templateContext, args),
+	browser_action: (templateContext, args) => getBrowserActionDescription(templateContext, args),
+	ask_followup_question: (templateContext) => getAskFollowupQuestionDescription(templateContext),
+	attempt_completion: (templateContext) => getAttemptCompletionDescription(templateContext),
+	use_mcp_tool: (templateContext, args) => getUseMcpToolDescription(templateContext, args),
+	access_mcp_resource: (templateContext, args) => getAccessMcpResourceDescription(templateContext, args),
+	switch_mode: (templateContext) => getSwitchModeDescription(templateContext),
+	new_task: (templateContext, args) => getNewTaskDescription(templateContext, args),
+	insert_content: (templateContext, args) => getInsertContentDescription(templateContext, args),
+	search_and_replace: (templateContext, args) => getSearchAndReplaceDescription(templateContext, args),
+	apply_diff: async (templateContext, args) =>
 		args.diffStrategy ? args.diffStrategy.getToolDescription({ cwd: args.cwd, toolOptions: args.toolOptions }) : "",
 }
 
 export async function getToolDescriptionsForMode(
+	templateContext: TemplateContext,
 	mode: Mode,
 	cwd: string,
 	supportsComputerUse: boolean,
@@ -98,7 +103,7 @@ export async function getToolDescriptionsForMode(
 				return undefined
 			}
 
-			return await descriptionFn({
+			return await descriptionFn(templateContext, {
 				...args,
 				toolOptions: undefined, // No tool options in group-based approach
 			})

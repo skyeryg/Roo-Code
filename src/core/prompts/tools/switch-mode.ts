@@ -1,5 +1,5 @@
-import { compilePrompt } from "../template"
+import { compilePrompt, TemplateContext } from "../template"
 
-export async function getSwitchModeDescription(): Promise<string> {
-	return await compilePrompt("tools/switch-mode.ts")
+export async function getSwitchModeDescription(templateContext: TemplateContext): Promise<string> {
+	return await compilePrompt("tools/switch-mode", templateContext)
 }

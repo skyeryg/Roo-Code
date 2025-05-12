@@ -1,6 +1,6 @@
-import { compilePrompt } from "../template"
+import { compilePrompt, TemplateContext } from "../template"
 import { ToolArgs } from "./types"
 
-export async function getReadFileDescription(args: ToolArgs): Promise<string> {
-	return await compilePrompt("tools/read-file.ts", { args })
+export async function getReadFileDescription(templateContext: TemplateContext, args: ToolArgs): Promise<string> {
+	return await compilePrompt("tools/read-file", templateContext, { args })
 }

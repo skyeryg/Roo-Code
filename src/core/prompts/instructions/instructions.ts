@@ -5,6 +5,7 @@ import { DiffStrategy } from "../../../shared/tools"
 import * as vscode from "vscode"
 
 interface InstructionsDetail {
+	cwd?: string
 	mcpHub?: McpHub
 	diffStrategy?: DiffStrategy
 	context?: vscode.ExtensionContext
@@ -13,10 +14,10 @@ interface InstructionsDetail {
 export async function fetchInstructions(text: string, detail: InstructionsDetail): Promise<string> {
 	switch (text) {
 		case "create_mcp_server": {
-			return await createMCPServerInstructions(detail.mcpHub, detail.diffStrategy)
+			return await createMCPServerInstructions(detail.cwd, detail.mcpHub, detail.diffStrategy)
 		}
 		case "create_mode": {
-			return await createModeInstructions(detail.context)
+			return await createModeInstructions(detail.cwd, detail.context)
 		}
 		default: {
 			return ""

@@ -3,6 +3,7 @@ import { DiffStrategy } from "../../../shared/tools"
 import { compilePrompt } from "../template"
 
 export async function createMCPServerInstructions(
+	cwd: string | undefined,
 	mcpHub: McpHub | undefined,
 	diffStrategy: DiffStrategy | undefined,
 ): Promise<string> {
@@ -15,10 +16,14 @@ export async function createMCPServerInstructions(
 		.map((server) => server.name)
 		.join(", ")
 
-	return await compilePrompt("instructions/create-mcp-server", {
-		diffStrategy,
-		mcpServersPath,
-		mcpSettingsFilePath,
-		mcpServers,
-	})
+	return await compilePrompt(
+		"instructions/create-mcp-server",
+		{ cwd: cwd || "" },
+		{
+			diffStrategy,
+			mcpServersPath,
+			mcpSettingsFilePath,
+			mcpServers,
+		},
+	)
 }

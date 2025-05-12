@@ -1,5 +1,5 @@
-import { compilePrompt } from "../template"
+import { compilePrompt, TemplateContext } from "../template"
 
-export async function getAskFollowupQuestionDescription(): Promise<string> {
-	return await compilePrompt("tools/ask-followup-question")
+export async function getAskFollowupQuestionDescription(templateContext: TemplateContext): Promise<string> {
+	return await compilePrompt("tools/ask-followup-question", templateContext)
 }

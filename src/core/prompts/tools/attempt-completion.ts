@@ -1,5 +1,5 @@
-import { compilePrompt } from "../template"
+import { compilePrompt, TemplateContext } from "../template"
 
-export async function getAttemptCompletionDescription(): Promise<string> {
-	return await compilePrompt("tools/attempt-completion")
+export async function getAttemptCompletionDescription(templateContext: TemplateContext): Promise<string> {
+	return await compilePrompt("tools/attempt-completion", templateContext)
 }

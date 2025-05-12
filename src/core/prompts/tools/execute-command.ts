@@ -1,6 +1,9 @@
-import { compilePrompt } from "../template"
+import { compilePrompt, TemplateContext } from "../template"
 import { ToolArgs } from "./types"
 
-export async function getExecuteCommandDescription(args: ToolArgs): Promise<string | undefined> {
-	return await compilePrompt("tools/execute-command", { args })
+export async function getExecuteCommandDescription(
+	templateContext: TemplateContext,
+	args: ToolArgs,
+): Promise<string | undefined> {
+	return await compilePrompt("tools/execute-command", templateContext, { args })
 }

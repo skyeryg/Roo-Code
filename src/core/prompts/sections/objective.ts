@@ -1,5 +1,5 @@
-import { compilePrompt } from "../template"
+import { compilePrompt, TemplateContext } from "../template"
 
-export async function getObjectiveSection(): Promise<string> {
-	return await compilePrompt("sections/objective")
+export async function getObjectiveSection(templateContext: TemplateContext): Promise<string> {
+	return await compilePrompt("sections/objective", templateContext)
 }

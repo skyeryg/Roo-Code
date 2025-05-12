@@ -4,11 +4,14 @@ import * as vscode from "vscode"
 import { GlobalFileNames } from "../../../shared/globalFileNames"
 import { compilePrompt } from "../template"
 
-export async function createModeInstructions(context: vscode.ExtensionContext | undefined): Promise<string> {
+export async function createModeInstructions(
+	cwd: string | undefined,
+	context: vscode.ExtensionContext | undefined,
+): Promise<string> {
 	if (!context) throw new Error("Missing VSCode Extension Context")
 
 	const settingsDir = path.join(context.globalStorageUri.fsPath, "settings")
 	const customModesPath = path.join(settingsDir, GlobalFileNames.customModes)
 
-	return await compilePrompt("instructions/create-mode", { customModesPath })
+	return await compilePrompt("instructions/create-mode", { cwd: cwd || "" }, { customModesPath })
 }
