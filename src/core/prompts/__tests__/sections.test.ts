@@ -40,15 +40,17 @@ describe("getCapabilitiesSection", () => {
 		},
 	}
 
+	const templateContext = { cwd, lang: "en" }
+
 	test("includes apply_diff in capabilities when diffStrategy is provided", async () => {
-		const result = await getCapabilitiesSection(cwd, false, mcpHub, mockDiffStrategy)
+		const result = await getCapabilitiesSection(templateContext, cwd, false, mcpHub, mockDiffStrategy)
 
 		expect(result).toContain("apply_diff or")
 		expect(result).toContain("then use the apply_diff or write_to_file tool")
 	})
 
 	test("excludes apply_diff from capabilities when diffStrategy is undefined", async () => {
-		const result = await getCapabilitiesSection(cwd, false, mcpHub, undefined)
+		const result = await getCapabilitiesSection(templateContext, cwd, false, mcpHub, undefined)
 
 		expect(result).not.toContain("apply_diff or")
 		expect(result).toContain("then use the write_to_file tool")
