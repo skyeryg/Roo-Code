@@ -6,6 +6,26 @@ import { Mode, ModeConfig, getModeConfig, isToolAllowedForMode, getGroupName } f
 import { ToolArgs } from "./types"
 import { compilePrompt, TemplateContext } from "../template"
 
+// const TOOL_TEMPLATES: Record<ToolName, string | (() => Promise<string>)> = {
+// 	execute_command: 'tools/execute-command',
+// 	read_file: 'tools/read-file',
+// 	fetch_instructions: 'tools/fetch-instructions',
+// 	write_to_file: 'tools/write-to-file',
+// 	apply_diff: "tools/apply-diff",
+// 	insert_content: "tools/insert-content",
+// 	search_and_replace: "tools/search-and-replace",
+// 	search_files: "tools/search-files",
+// 	list_files: "tools/list-files",
+// 	list_code_definition_names: "tools/list-code-definition-names",
+// 	browser_action: "tools/browser-action",
+// 	use_mcp_tool: "tools/use-mcp-tool",
+// 	access_mcp_resource: "tools/access-mcp-resource",
+// 	ask_followup_question: "tools/ask-followup-question",
+// 	attempt_completion: "tools/attempt-completion",
+// 	switch_mode: "tools/switch-mode",
+// 	new_task: "tools/new-task"
+// }
+
 // Map of tool names to their description functions
 const toolDescriptionMap: Record<
 	string,

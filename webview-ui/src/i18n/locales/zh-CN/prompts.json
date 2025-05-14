@@ -145,5 +145,10 @@
 		},
 		"deleteMode": "删除模式"
 	},
-	"allFiles": "所有文件"
+	"allFiles": "所有文件",
+	"allTools": {
+		"execute_command": {
+			"description": "execute_command"
+		}
+	}
 }
